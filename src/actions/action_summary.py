@@ -1,10 +1,10 @@
 from src.actions.action_decorator import Action, ActionRegistry
-from typing import Any
+from src.utils.web_utils import WebHelper
 
 
 @ActionRegistry.register('summary', 'Summarize the content of a given URL')
 class SummaryAction(Action):
-    def execute(self, room_id: str, account_id: str, message: str, web_helper: Any) -> str:
+    def execute(self, room_id: str, account_id: str, message: str, web_helper: WebHelper) -> str:
         # Extract URL from the message
         words = message.split()
         url = next((word for word in words if word.startswith('http')), None)

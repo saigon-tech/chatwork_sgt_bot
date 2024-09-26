@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - './src:/sgtbot'
+      - '.:/home/user/sgtbot'
     env_file:
       - '.env'
     ports:
@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - './src:/sgtbot'
+      - '.:/home/user/sgtbot'
     env_file:
       - '.env'
     depends_on:

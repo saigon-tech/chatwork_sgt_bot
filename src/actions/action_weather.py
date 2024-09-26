@@ -1,10 +1,10 @@
 from src.actions.action_decorator import Action, ActionRegistry
-from typing import Any
+from src.utils.web_utils import WebHelper
 
 
 @ActionRegistry.register('weather', 'Get the current weather for a location')
 class WeatherAction(Action):
-    def execute(self, room_id: str, account_id: str, message: str, web_helper: Any) -> str:
+    def execute(self, room_id: str, account_id: str, message: str, web_helper: WebHelper) -> str:
         # This is a placeholder. In a real implementation, you would:
         # 1. Extract the location from the message
         # 2. Call a weather API to get the weather data

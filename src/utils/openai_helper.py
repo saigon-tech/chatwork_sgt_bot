@@ -1,6 +1,6 @@
 from openai import OpenAI
 from src.config import Config
-
+from src.utils.logger import logger
 
 class OpenAIHelper:
     _instance = None
@@ -23,5 +23,5 @@ class OpenAIHelper:
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
-            print(f"Error in OpenAI API call: {e}")
+            logger.error(f"Error in OpenAI API call: {e}")
             return None

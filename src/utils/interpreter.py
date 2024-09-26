@@ -1,7 +1,7 @@
 from openai import OpenAI
 from src.config import Config
 from src.actions.action_decorator import ActionRegistry
-
+from src.utils.logger import logger
 # Initialize OpenAI client
 client = OpenAI(api_key=Config.OPENAI_API_KEY)
 
@@ -33,5 +33,5 @@ def interpret_message(message):
 
         return intent
     except Exception as e:
-        print(f"Error in interpreting message: {e}")
+        logger.error(f"Error in interpreting message: {e}")
         return 'unknown'

@@ -1,6 +1,5 @@
 from flask import Flask
 from celery import Celery
-from src.config import Config
 from src.api.routes import api_bp
 
 
@@ -14,7 +13,7 @@ def create_app(setting_override=None):
 
     @app.route('/')
     def index():
-        return 'sgtbot'
+        return 'It works!'
 
     return app
 

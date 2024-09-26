@@ -1,7 +1,7 @@
 import requests
 from src.config import Config
 from celery import shared_task
-
+from src.utils.logger import logger
 
 @shared_task
 def send_message_to_room(room_id, message):
@@ -18,5 +18,5 @@ def send_message_to_room(room_id, message):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error sending message to Chatwork: {e}")
+        logger.error(f"Error sending message to Chatwork: {e}")
         return None

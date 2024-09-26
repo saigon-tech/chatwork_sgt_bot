@@ -9,11 +9,14 @@ bot = ChatworkBot()
 
 
 @shared_task
-def process_chatwork_message(message, room_id, account_id):
-    result = bot.handle_message(message, room_id, account_id)
-    if result['status'] != 'success':
+def process_chatwork_message(message, room_id, account_id, message_id):
+    result = bot.handle_message(message, room_id, account_id, message_id)
+    if result['status'] == 'skipped':
+        logger.info(f"Skipped processing message: {result['message']}")
+    elif result['status'] != 'success':
         logger.error(f"Error processing message: {result['message']}")
-
+    else:
+        logger.info(f"Successfully processed message: {result['message']}")
 
 @api_bp.route('/callback', methods=['POST'])
 def chatwork_callback():
@@ -28,16 +31,18 @@ def chatwork_callback():
         return jsonify({"status": "error", "message": "Invalid signature"}), 401
 
     data = request.json
+    logger.info(f"Received webhook data: {data}")
     room_id = data.get('webhook_event', {}).get('room_id')
+    message_id = data.get('webhook_event', {}).get('message_id')
     message = data.get('webhook_event', {}).get('body')
     account_id = data.get('webhook_event', {}).get('from_account_id')
 
-    if not all([room_id, message, account_id]):
+    if not all([room_id, message, account_id, message_id]):
         logger.error("Missing required data in webhook payload")
         return jsonify({"status": "error", "message": "Missing required data"}), 400
 
     # Process the message asynchronously
-    process_chatwork_message.delay(message, room_id, account_id)
+    process_chatwork_message.delay(message, room_id, account_id, message_id)
 
     return jsonify({"status": "success", "message": "Webhook received and processing"}), 200
 
