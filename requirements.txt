@@ -1,0 +1,14 @@
+# app
+Flask==3.0.3
+Werkzeug==3.0.4
+python-dotenv==1.0.0
+requests==2.32.3
+beautifulsoup4==4.12.3
+pytest==8.3.3
+
+# worker job
+redis==3.5.3
+celery==5.4.0
+
+# openai
+openai==1.48.0

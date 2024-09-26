@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: sgtbot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - './src:/sgtbot'
+    env_file:
+      - '.env'
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
+    command: python run.py
+  
+  worker:
+    container_name: sgtbot-worker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - './src:/sgtbot'
+    env_file:
+      - '.env'
+    depends_on:
+      - redis
+    command: celery -A run.celery_app worker -l info
+
+  redis:
+    container_name: sgtbot-redis
+    image: redis:7.0.2-alpine
+    volumes:
+      - 'redis:/data'
+
+volumes:
+  redis:
