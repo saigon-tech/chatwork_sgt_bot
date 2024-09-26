@@ -24,6 +24,7 @@ A modular, extensible chatbot for SGT Team. The bot listens for mentions in Chat
 - Chatwork API token
 
 ## Project Structure
+```
 chatwork-bot/
 │
 ├── app.py                   # Main Flask application
@@ -50,7 +51,7 @@ chatwork-bot/
     ├── test_news.py         # Test for news action
     ├── test_summary.py      # Test for summary action
     └── __init__.py          # Init file for tests module
-
+```
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
