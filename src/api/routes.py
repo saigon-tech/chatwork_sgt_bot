@@ -18,6 +18,7 @@ def process_chatwork_message(message, room_id, account_id, message_id):
     else:
         logger.info(f"Successfully processed message: {result['message']}")
 
+
 @api_bp.route('/callback', methods=['POST'])
 def chatwork_callback():
     signature = request.args.get('chatwork_webhook_signature')

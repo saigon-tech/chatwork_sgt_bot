@@ -25,9 +25,9 @@ up:
 down:
 	$(DOCKER_COMPOSE) down
 
-# Run the Flask application (if needed to override the default command)
-run:
-	$(DOCKER_COMPOSE) exec $(SERVICE_NAME) python run.py
+# Connect to the container shell
+connect:
+	$(DOCKER_COMPOSE) exec $(SERVICE_NAME) bash
 
 # Run all tests
 test:

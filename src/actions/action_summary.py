@@ -13,8 +13,16 @@ class SummaryAction(Action):
             return "Please provide a valid URL to summarize."
 
         try:
-            text = web_helper.extract_text_from_url(url)
-            summary = web_helper.summarize_text(text)
-            return f"Summary of {url}:\n\n{summary}"
+            # Fetch the text content from the URL
+            content = web_helper.fetch_url_text(url)
+
+            # Generate a summary using AI
+            summary = web_helper.query_ai(
+                prompt=f"Please summarize the following text in about 3-4 sentences:\n\n{content}",
+                system_message="You are a helpful assistant that summarizes text.",
+                max_tokens=300
+            )
+
+            return f"Summary of {url}\n\n{summary}"
         except Exception as e:
             return f"An error occurred while trying to summarize the URL: {str(e)}"

@@ -11,7 +11,7 @@ class ChatworkBot:
             cleaned_message = self._clean_message(message)
             if cleaned_message is None:
                 return {"status": "skipped", "message": "Message starts with [toall], skipping processing"}
-            
+
             intent = self._get_intent(cleaned_message)
             response = self._generate_response(intent, room_id, account_id, cleaned_message)
             self._send_response(room_id, account_id, message_id, response)

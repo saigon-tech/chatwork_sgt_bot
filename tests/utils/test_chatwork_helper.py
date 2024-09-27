@@ -29,12 +29,11 @@ def test_send_message_to_room_success(mock_config):
         )
 
 
-def test_send_message_to_room_error(mock_config):
+def test_send_message_to_room_error(mock_config, caplog):
     with patch('src.utils.chatwork_api.requests.post') as mock_post:
         mock_post.side_effect = requests.exceptions.RequestException("API error")
 
-        with patch('builtins.print') as mock_print:
-            result = send_message_to_room("room_id", "Test message")
+        result = send_message_to_room("room_id", "Test message")
 
         assert result is None
-        mock_print.assert_called_once_with("Error sending message to Chatwork: API error")
+        assert "Error sending message to Chatwork: API error" in caplog.text
