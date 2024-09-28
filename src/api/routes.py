@@ -4,24 +4,24 @@ from src.utils.signature_verifier import verify_signature
 from src.utils.logger import logger
 from celery import shared_task
 
-api_bp = Blueprint('api', __name__)
+api_bp = Blueprint("api", __name__)
 bot = ChatworkBot()
 
 
 @shared_task
 def process_chatwork_message(message, room_id, account_id, message_id):
     result = bot.handle_message(message, room_id, account_id, message_id)
-    if result['status'] == 'skipped':
+    if result["status"] == "skipped":
         logger.info(f"Skipped processing message: {result['message']}")
-    elif result['status'] != 'success':
+    elif result["status"] != "success":
         logger.error(f"Error processing message: {result['message']}")
     else:
         logger.info(f"Successfully processed message: {result['message']}")
 
 
-@api_bp.route('/callback', methods=['POST'])
+@api_bp.route("/callback", methods=["POST"])
 def chatwork_callback():
-    signature = request.args.get('chatwork_webhook_signature')
+    signature = request.args.get("chatwork_webhook_signature")
     if not signature:
         logger.error("Missing signature")
         return jsonify({"status": "error", "message": "Missing signature"}), 400
@@ -33,21 +33,27 @@ def chatwork_callback():
 
     data = request.json
     logger.info(f"Received webhook data: {data}")
-    room_id = data.get('webhook_event', {}).get('room_id')
-    message_id = data.get('webhook_event', {}).get('message_id')
-    message = data.get('webhook_event', {}).get('body')
-    account_id = data.get('webhook_event', {}).get('from_account_id')
+    room_id = data.get("webhook_event", {}).get("room_id")
+    message_id = data.get("webhook_event", {}).get("message_id")
+    message = data.get("webhook_event", {}).get("body")
+    account_id = data.get("webhook_event", {}).get("from_account_id")
 
     if not all([room_id, message, account_id, message_id]):
         logger.error("Missing required data in webhook payload")
-        return jsonify({"status": "error", "message": "Missing required data"}), 400
+        return (
+            jsonify({"status": "error", "message": "Missing required data"}),
+            400,
+        )
 
     # Process the message asynchronously
     process_chatwork_message.delay(message, room_id, account_id, message_id)
 
-    return jsonify({"status": "success", "message": "Webhook received and processing"}), 200
+    return (
+        jsonify({"status": "success", "message": "Webhook received and processing"}),
+        200,
+    )
 
 
-@api_bp.route('/health', methods=['GET'])
+@api_bp.route("/health", methods=["GET"])
 def health_check():
     return jsonify({"status": "healthy"}), 200

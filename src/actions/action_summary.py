@@ -2,12 +2,14 @@ from src.actions.action_decorator import Action, ActionRegistry
 from src.utils.web_utils import WebHelper
 
 
-@ActionRegistry.register('summary', 'Summarize the content of a given URL')
+@ActionRegistry.register("summary", "Summarize the content of a given URL")
 class SummaryAction(Action):
-    def execute(self, room_id: str, account_id: str, message: str, web_helper: WebHelper) -> str:
+    def execute(
+        self, room_id: str, account_id: str, message: str, web_helper: WebHelper
+    ) -> str:
         # Extract URL from the message
         words = message.split()
-        url = next((word for word in words if word.startswith('http')), None)
+        url = next((word for word in words if word.startswith("http")), None)
 
         if not url:
             return "Please provide a valid URL to summarize."
@@ -20,7 +22,7 @@ class SummaryAction(Action):
             summary = web_helper.query_ai(
                 prompt=f"Please summarize the following text in about 3-4 sentences:\n\n{content}",
                 system_message="You are a helpful assistant that summarizes text.",
-                max_tokens=300
+                max_tokens=300,
             )
 
             return f"Summary of {url}\n\n{summary}"

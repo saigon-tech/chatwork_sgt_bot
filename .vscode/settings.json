@@ -1,0 +1,28 @@
+{
+    "python.languageServer": "Pylance",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always",
+            "source.unusedImports": "explicit",
+        },
+        "editor.formatOnSave": true,
+        "editor.rulers": [
+            80,
+            99
+        ]
+    },
+    "black-formatter.importStrategy": "fromEnvironment",
+    "black-formatter.interpreter": [
+        "${workspaceFolder}/.venv/bin/python"
+    ],
+    "black-formatter.path": [],
+    "black-formatter.args": [
+        "--line-length",
+        "99"
+    ],
+    "flake8.args": [
+        "--max-line-length",
+        "99"
+    ]
+}

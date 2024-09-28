@@ -11,7 +11,9 @@ class Action(ABC):
         self.openai_helper = OpenAIHelper()
 
     @abstractmethod
-    def execute(self, room_id: str, account_id: str, message: str, web_helper: WebHelper) -> Any:
+    def execute(
+        self, room_id: str, account_id: str, message: str, web_helper: WebHelper
+    ) -> Any:
         pass
 
 
@@ -25,8 +27,8 @@ class ActionRegistry:
             if not issubclass(action_class, Action):
                 raise TypeError(f"{action_class.__name__} must inherit from Action")
             cls._actions[intent] = {
-                'handler': action_class(),
-                'description': description
+                "handler": action_class(),
+                "description": description,
             }
             return action_class
 
@@ -34,12 +36,18 @@ class ActionRegistry:
 
     @classmethod
     def get_action(cls, intent: str) -> Optional[Action]:
-        return cls._actions.get(intent, {}).get('handler')
+        return cls._actions.get(intent, {}).get("handler")
 
     @classmethod
-    def execute_action(cls, intent: str, room_id: str, account_id: str, message: str) -> Any:
+    def execute_action(
+        cls, intent: str, room_id: str, account_id: str, message: str
+    ) -> Any:
         action = cls.get_action(intent)
-        return action.execute(room_id, account_id, message, cls._web_helper) if action else None
+        return (
+            action.execute(room_id, account_id, message, cls._web_helper)
+            if action
+            else None
+        )
 
     @classmethod
     def get_all_intents(cls) -> List[str]:
@@ -53,8 +61,12 @@ class ActionRegistry:
 def load_actions() -> None:
     actions_dir = os.path.dirname(__file__)
     for filename in os.listdir(actions_dir):
-        if filename.startswith('action_') and filename.endswith('.py') and filename != 'action_decorator.py':
-            module_name = f'src.actions.{filename[:-3]}'
+        if (
+            filename.startswith("action_")
+            and filename.endswith(".py")
+            and filename != "action_decorator.py"
+        ):
+            module_name = f"src.actions.{filename[:-3]}"
             importlib.import_module(module_name)
 
 

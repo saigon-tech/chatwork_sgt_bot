@@ -2,6 +2,7 @@ from openai import OpenAI
 from src.config import Config
 from src.utils.logger import logger
 
+
 class OpenAIHelper:
     _instance = None
 
@@ -11,15 +12,20 @@ class OpenAIHelper:
             cls._instance.client = OpenAI(api_key=Config.OPENAI_API_KEY)
         return cls._instance
 
-    def generate_text(self, prompt, system_message="You are a helpful assistant.", max_tokens=150):
+    def generate_text(
+        self,
+        prompt,
+        system_message="You are a helpful assistant.",
+        max_tokens=150,
+    ):
         try:
             response = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": system_message},
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": prompt},
                 ],
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
