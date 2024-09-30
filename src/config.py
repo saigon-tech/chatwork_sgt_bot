@@ -14,6 +14,9 @@ class Config:
 
     # Celery configurations
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://redis:6379/0"
-    CELERY_RESULT_BACKEND = (
-        os.environ.get("CELERY_RESULT_BACKEND") or "redis://redis:6379/0"
-    )
+    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND") or "redis://redis:6379/0"
+
+    # Add these lines to the Config class
+    GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+    GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
+    GITHUB_EXCLUDE_PATTERNS = os.environ.get("GITHUB_EXCLUDE_PATTERNS", "")
