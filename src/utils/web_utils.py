@@ -45,6 +45,7 @@ class WebHelper:
         prompt: str,
         system_message: str = "You are a helpful assistant.",
         max_tokens: int = 500,
+        model: str = "gpt-3.5-turbo",
     ) -> str:
         """
         Query AI model to generate text based on a prompt.
@@ -54,4 +55,4 @@ class WebHelper:
         :param max_tokens: Maximum number of tokens to generate
         :return: Generated text
         """
-        return self.openai_helper.generate_text(prompt, system_message, max_tokens)
+        return self.openai_helper.generate_text(prompt, model, system_message, max_tokens)

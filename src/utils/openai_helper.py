@@ -14,13 +14,14 @@ class OpenAIHelper:
 
     def generate_text(
         self,
-        prompt,
+        prompt: str,
+        model: str,
         system_message="You are a helpful assistant.",
         max_tokens=150,
     ):
         try:
             response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model=model,
                 messages=[
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": prompt},

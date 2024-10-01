@@ -110,12 +110,14 @@ Git diff to review:
         """Send code for AI analysis and parse the response"""
         prompt = self._create_prompt(file, chunk, pr_details)
         response = web_helper.query_ai(
-            prompt, system_message="You are a code review assistant.", max_tokens=4096
+            prompt,
+            model="gpt-4o",
+            system_message="You are a code review assistant.",
+            max_tokens=4096,
         )
         try:
             return json.loads(response)
         except json.JSONDecodeError:
-            logger.warning(f"Failed to parse AI response for file: {file.filename}")
             return {"reviews": []}
 
     def _create_review_comments(self, pr, comments):
