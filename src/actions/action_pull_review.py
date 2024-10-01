@@ -82,17 +82,23 @@ class PullReviewAction(Action):
 
     def _create_prompt(self, file, chunk, pr_details):
         return f"""
-Your task is to review pull requests. Instructions:
-- Provide the response in following JSON format:
-{{"reviews": [{{"lineNumber":  <line_number>, "reviewComment": "<review comment>"}}]}}
+Your task is to perform a rigorous and critical code review. Instructions:
+- Provide the response in the following JSON format:
+{{"reviews": [{{"lineNumber": <line_number>, "reviewComment": "<review comment>"}}]}}
+- Be extremely thorough and critical in your review.
+- Identify and comment on ANY potential issues, no matter how small.
+- Look for code smells, inefficiencies, potential bugs, and style inconsistencies.
+- Suggest improvements for readability, performance, and maintainability.
+- Do not hesitate to point out areas that could be optimized or refactored.
+- Be direct and specific in your feedback.
 - Do not give positive comments or compliments.
-- Provide comments and suggestions ONLY if there is something to improve,
-    otherwise "reviews" should be an empty array.
 - Write the comment in GitHub Markdown format.
-- Use the given description only for the overall context and only comment the code.
-- IMPORTANT: NEVER suggest adding comments to the code.
-Review the following code diff in the file "{file.filename}" and take the pull request
-title and description into account when writing the response.
+- Use the given description only for overall context and focus on the code itself.
+- IMPORTANT: Do not suggest adding comments to the code.
+
+Review the following code diff in the file "{file.filename}" with a critical eye.
+Consider the pull request title and description for context,
+but focus on finding issues in the code itself.
 
 Pull request title: {pr_details['title']}
 Pull request description:
@@ -104,6 +110,8 @@ Git diff to review:
 ```diff
 {chunk}
 ```
+
+Remember: Be aggressive in your review. Find issues and provide specific, actionable feedback.
 """
 
     def _analyze_code(self, file, chunk, pr_details, web_helper: WebHelper):
