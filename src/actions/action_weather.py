@@ -3,7 +3,7 @@ from src.actions.action_decorator import Action, ActionRegistry
 from src.utils.web_utils import WebHelper
 from src.utils.logger import logger
 
-@ActionRegistry.register("weather", "Forecasts weather for a given location.")
+@ActionRegistry.register("weather", "Forecast weather report for a given location or city or forecast weather request")
 class SummaryAction(Action):
     def execute(
         self, room_id: str, account_id: str, message: str, web_helper: WebHelper
@@ -37,7 +37,7 @@ class SummaryAction(Action):
             temMax = json["main"]["temp_max"]
             tempMax = round(5 * (temMax - 32) / 9, 1)
 
-            return  f"\nCurrent weather of {name} ({country}) là {description}.\nTemperature {temp}°C ({tempMin}°C - {tempMax}°C)"
+            return  f"Current weather of {name} ({country}) is {description}.\nTemperature {temp}°C ({tempMin}°C - {tempMax}°C)"
         except KeyError as e:
             raise e
         except Exception as e:
