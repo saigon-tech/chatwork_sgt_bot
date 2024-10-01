@@ -3,7 +3,7 @@ from src.actions.action_decorator import Action, ActionRegistry
 from src.utils.web_utils import WebHelper
 from src.utils.logger import logger
 
-@ActionRegistry.register("weather", "Forecasts weather for a given location.)
+@ActionRegistry.register("weather", "Forecasts weather for a given location.")
 class SummaryAction(Action):
     def execute(
         self, room_id: str, account_id: str, message: str, web_helper: WebHelper
