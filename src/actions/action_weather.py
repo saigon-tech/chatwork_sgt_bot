@@ -1,29 +1,28 @@
+import requests
 from src.actions.action_decorator import Action, ActionRegistry
 from src.utils.web_utils import WebHelper
-import requests
+from src.utils.logger import logger
 
-@ActionRegistry.register("weather", "Weather forecast")
+@ActionRegistry.register("weather", "Forecasts weather for a given location.)
 class SummaryAction(Action):
     def execute(
         self, room_id: str, account_id: str, message: str, web_helper: WebHelper
     ) -> str:
         try:
-            # Fetch the text content from the URL
-            content = web_helper.fetch_url_text(url)
-
             # Generate a summary using AI
             location = web_helper.query_ai(
-                prompt=f"Please return city name in text:\n\n{content}",
+                prompt=f"Please return city name in text:\n\n{message} \n\n If not found city name return Ho Chi Minh",
                 system_message="You are a helpful assistant that return city name in text. Do not provide additional information or explanation beyond the request.",
                 max_tokens=100,
             )
 
             # Get message
-            weather_message = self.weather_forecast(location)
+            weather_message = self._weather_forecast(location)
 
             return weather_message
         except Exception as e:
-            return f"An error occurred while trying to get weather forecast: {e}"
+            logger.error(f"An error occurred while trying to get weather forecast: {str(e)}", exc_info=True)
+            return f"Cannot check the weather forecast for your input."
 
     def format_response(self, json):
         try:
@@ -38,25 +37,26 @@ class SummaryAction(Action):
             temMax = json["main"]["temp_max"]
             tempMax = round(5 * (temMax - 32) / 9, 1)
 
-            return  f"\nThời tiết hiện tại của {name} ({country}) là {description}.\nNhiệt độ {temp}°C ({tempMin}°C - {tempMax}°C)"
+            return  f"\nCurrent weather of {name} ({country}) là {description}.\nTemperature {temp}°C ({tempMin}°C - {tempMax}°C)"
         except KeyError as e:
-            return f"Lỗi: Thiếu khóa {e}"
+            raise e
         except Exception as e:
-            return  f"Đã xảy ra lỗi: {e}"
+            raise e
 
-    def weather_forecast(self, city):
+    def _weather_forecast(self, city):
         # Secret info
         api_url = "https://open-weather13.p.rapidapi.com/"
         headers = headers = {
             "x-rapidapi-host": "open-weather13.p.rapidapi.com",
             "x-rapidapi-key": "073922d575msh362e38820e8e6e2p129d8fjsn3537b7039650", 
         }
-        url = api_url + "/city/" + city + "/VI"
+        url = api_url + "/city/" + city + "/EN"
 
         # Get weather forecast
         response = requests.get(url, headers=headers)
 
         if response.status_code == 200:
-            return self.format_response(response.json())
+            return self._format_response(response.json())
         else:
-            return f"Lỗi: {response.status_code}, {response.text}"
+            raise Exception(f"{response.status_code} {response.text}"
+)
