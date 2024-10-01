@@ -11,7 +11,7 @@ class SummaryAction(Action):
         try:
             # Generate a summary using AI
             location = web_helper.query_ai(
-                prompt=f"Please return city name in text:\n\n{message} \n\n If not found city name return Ho Chi Minh",
+                prompt=f"Please only return city name in text in lower case and space in english, If not found city name return Ho Chi Minh:\n\n{message}",
                 system_message="You are a helpful assistant that return city name in text. Do not provide additional information or explanation beyond the request.",
                 max_tokens=100,
             )
