@@ -48,7 +48,7 @@ class SummaryAction(Action):
         api_url = "https://open-weather13.p.rapidapi.com/"
         headers = headers = {
             "x-rapidapi-host": "open-weather13.p.rapidapi.com",
-            "x-rapidapi-key": "073922d575msh362e38820e8e6e2p129d8fjsn3537b7039650", 
+            "x-rapidapi-key": "02cc6ec43bmsh87d1bf82f74b591p1b74cejsn580422db90a3", 
         }
         url = api_url + "/city/" + city + "/EN"
 
