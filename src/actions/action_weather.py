@@ -24,7 +24,7 @@ class SummaryAction(Action):
             logger.error(f"An error occurred while trying to get weather forecast: {str(e)}", exc_info=True)
             return f"Cannot check the weather forecast for your input."
 
-    def format_response(self, json):
+    def _format_response(self, json):
         try:
             name = json["name"]
             country = json["sys"]["country"]
