@@ -4,7 +4,7 @@ LABEL maintainer="Huy Nguyen <nqhuy.sgt@gmail.com>"
 RUN pip3 install --upgrade pip
 
 # set timezone
-RUN apt-get update && apt-get install -y tzdata git
+RUN apt-get update && apt-get install -y tzdata 
 ENV TIME_ZONE Asia/Ho_Chi_Minh
 RUN echo "${TIME_ZONE}" > /etc/timezone \
     && ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
