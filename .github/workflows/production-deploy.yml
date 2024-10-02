@@ -1,0 +1,37 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout source code
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run tests
+      - name: Run tests
+        run: pytest tests/            
+
+      # Push source
+      - name: Deploy to Dokku
+        if: success()
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: ${{ secrets.PRODUCTION_DOKKU_GIT_URL }}
+          ssh_private_key: "${{ secrets.PRODUCTION_DOKKU_SSH_KEY }}"
