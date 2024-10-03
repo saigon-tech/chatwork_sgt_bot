@@ -57,14 +57,18 @@ class WeatherAction(Action):
             # Generate a summary using AI
             location = web_helper.query_ai(
                 prompt=(
-                    "Please only return city name in text in lower case and space in english,"
-                    f"If not found city name return Ho Chi Minh:\n\n{message}"),
+                    "Only return full city name in text in lower case and space in english:"
+                    f"\n\n'{message}'\n\nIf not found city name return 'null'"),
                 system_message=(
                     "You are a helpful assistant that return city name in text."
                     "Do not provide additional information or explanation beyond the request."
                 ),
-                max_tokens=100,
+                # 'San Fernando del Valle de Catamarca' is a longest city name has 43 character
+                max_tokens=43,
             )
+
+            if location == 'null':
+                location = 'ho chi minh'
 
             # Get message
             weather_message = weather_forecast(location)
