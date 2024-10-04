@@ -12,7 +12,7 @@ services:
       - '.env'
     ports:
       - '${APP_PORT}:${APP_PORT}'
-    command: python run.py
+    command: sh -c 'chmod +x /home/user/sgtbot/entrypoint.sh && /home/user/sgtbot/entrypoint.sh && python run.py'
   
   worker:
     container_name: sgtbot-worker

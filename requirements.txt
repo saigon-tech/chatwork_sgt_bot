@@ -16,3 +16,6 @@ openai==1.48.0
 
 # action_pull_review
 PyGithub==1.59.0
+
+Flask-Migrate==4.0.7
+Flask-SQLAlchemy==3.1.1

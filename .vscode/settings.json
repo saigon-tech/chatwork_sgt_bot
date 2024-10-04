@@ -4,7 +4,6 @@
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.codeActionsOnSave": {
             "source.organizeImports": "always",
-            "source.unusedImports": "explicit",
         },
         "editor.formatOnSave": true,
         "editor.rulers": [
