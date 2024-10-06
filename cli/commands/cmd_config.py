@@ -14,9 +14,10 @@ def cli():
 
 
 @cli.command()
+@click.argument("action_name")
 @click.argument("key_value_pairs", nargs=-1)
-def set(key_value_pairs):
-    """Set (add or update) config key-value pairs."""
+def set(action_name, key_value_pairs):
+    """Set (add or update) config key-value pairs for a specific action."""
     with app.app_context():
         for pair in key_value_pairs:
             try:
@@ -25,22 +26,28 @@ def set(key_value_pairs):
                 click.echo(f"Error: Invalid format for '{pair}'. Use 'key=value'.")
                 continue
 
-            config = Config.query.filter_by(key=key).first()
+            full_key = f"{action_name.upper()}.{key}"
+            config = Config.query.filter_by(key=full_key).first()
             if config:
                 config.value = value
-                click.echo(f"Updated: {key} = {value}")
+                click.echo(f"Updated: {full_key} = {value}")
             else:
-                config = Config(key=key, value=value)
+                config = Config(key=full_key, value=value)
                 db.session.add(config)
-                click.echo(f"Added: {key} = {value}")
+                click.echo(f"Added: {full_key} = {value}")
         db.session.commit()
 
 
 @cli.command()
-def show():
-    """Show all config key-value pairs."""
+@click.option("--action", help="Filter configs by action name")
+def show(action):
+    """Show all config key-value pairs, optionally filtered by action."""
     with app.app_context():
-        configs = Config.query.all()
+        query = Config.query
+        if action:
+            query = query.filter(Config.key.startswith(f"{action.upper()}."))
+
+        configs = query.all()
         if configs:
             click.echo("Config entries:")
             for config in configs:
@@ -50,17 +57,19 @@ def show():
 
 
 @cli.command()
+@click.argument("action_name")
 @click.argument("keys", nargs=-1)
-def delete(keys):
-    """Delete config entries by keys."""
+def delete(action_name, keys):
+    """Delete config entries by keys for a specific action."""
     with app.app_context():
         for key in keys:
-            config = Config.query.filter_by(key=key).first()
+            full_key = f"{action_name.upper()}.{key}"
+            config = Config.query.filter_by(key=full_key).first()
             if config:
                 db.session.delete(config)
-                click.echo(f"Deleted: {key}")
+                click.echo(f"Deleted: {full_key}")
             else:
-                click.echo(f"Not found: {key}")
+                click.echo(f"Not found: {full_key}")
         db.session.commit()
 
 
