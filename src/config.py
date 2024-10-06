@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DEFAULT_REDIS_URL = "redis://redis:6379/0"
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
 class Config:
@@ -38,21 +37,7 @@ class ProductionConfig(Config):
     FLASK_ENV = "production"
     DEBUG = False
 
-    SQLITE_DATABASE_NAME = "storage/production_bot.db"
-
-    # Connection to database
-    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    database_name = os.getenv("SQLITE_DATABASE_NAME")
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(basedir, database_name)}"
-
 
 class DevelopmentConfig(Config):
     FLASK_ENV = "development"
     DEBUG = True
-    PORT = os.environ.get("PORT") or 5000
-
-    SQLITE_DATABASE_NAME = "storage/development_bot.db"
-
-    # Connection to database
-    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, SQLITE_DATABASE_NAME)}"
