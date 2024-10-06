@@ -1,6 +1,10 @@
 from flask import Flask
 from celery import Celery
 from src.api.routes import api_bp
+from .extensions import db, migrate, cache
+
+# flake8: noqa
+import src.model
 
 
 def create_app(setting_override=None):
@@ -10,6 +14,7 @@ def create_app(setting_override=None):
         app.config.update(setting_override)
 
     app.register_blueprint(api_bp)
+    extensions(app)
 
     @app.route("/")
     def index():
@@ -34,3 +39,9 @@ def create_celery_app(app=None):
 
     celery.Task = ContextTask
     return celery
+
+
+def extensions(app):
+    db.init_app(app)
+    migrate.init_app(app)
+    cache.init_app(app)

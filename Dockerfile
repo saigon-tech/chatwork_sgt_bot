@@ -1,6 +1,11 @@
 FROM python:3.9.15-slim
 LABEL maintainer="Huy Nguyen <nqhuy.sgt@gmail.com>"
 
+
+# install litestream
+ADD https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz /tmp/litestream.tar.gz
+RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
+
 RUN pip3 install --upgrade pip
 
 # set timezone
@@ -21,5 +26,6 @@ COPY --chown=user:user . .
 ENV PATH="/home/user/.local/bin:${PATH}"
 
 RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --user --editable .
 
 ENV FLASK_APP ${INSTALL_PATH}/run.py

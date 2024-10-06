@@ -20,3 +20,18 @@ class Config:
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
     GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
     GITHUB_EXCLUDE_PATTERNS = os.environ.get("GITHUB_EXCLUDE_PATTERNS", "")
+
+    # Connection to database
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    database_name = os.getenv("SQLITE_DATABASE_NAME", default="database.db")
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(basedir, database_name)}"
+
+    # https://www.reddit.com/r/flask/comments/1z1oox/af_flasksqlalchemy_has_a_parameter_sqlalchemy/
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = False
+
+    # https://stackoverflow.com/questions/33738467/how-do-i-know-if-i-can-disable-sqlalchemy-track-modifications
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    CACHE_TYPE = "RedisCache"
+    CACHE_DEFAULT_TIMEOUT = 1800
+    CACHE_REDIS_URL = os.environ.get("CACHE_REDIS_URL") or "redis://redis:6379/0"
