@@ -32,6 +32,11 @@ class Config:
     CACHE_DEFAULT_TIMEOUT = 1800
     CACHE_REDIS_URL = os.environ.get("CACHE_REDIS_URL") or DEFAULT_REDIS_URL
 
+    # Connection to database
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    database_name = os.getenv("SQLITE_DATABASE_NAME", default="database.db")
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(basedir, database_name)}"
+
 
 class ProductionConfig(Config):
     FLASK_ENV = "production"
