@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Start Celery worker
-celery -A run.celery_app worker -l info
-
 if [ "$FLASK_ENV" = "production" ]; then
   # Check if the database file doesn't exist
   if [ ! -f "$SQLITE_DATABASE_NAME" ]; then
@@ -27,5 +24,5 @@ if [ "$FLASK_ENV" = "production" ]; then
   "
 
   # Start replication
-  litestream replicate "$SQLITE_DATABASE_NAME" "$REPLICA_URL"
+  litestream replicate -exec "gunicorn -b 0.0.0.0:$PORT run:app" "$SQLITE_DATABASE_NAME" "$REPLICA_URL"
 fi
