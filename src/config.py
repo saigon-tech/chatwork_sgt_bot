@@ -34,6 +34,4 @@ class Config:
 
     CACHE_TYPE = "RedisCache"
     CACHE_DEFAULT_TIMEOUT = 1800
-    CACHE_REDIS_HOST = "redis"
-    CACHE_REDIS_PORT = 6379
-    CACHE_REDIS_DB = 0
+    CACHE_REDIS_URL = os.environ.get("CACHE_REDIS_URL") or "redis://redis:6379/0"
