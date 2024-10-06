@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Start Celery worker
+celery -A run.celery_app worker -l info
+
 if [ "$FLASK_ENV" = "production" ]; then
   # Check if the database file doesn't exist
   if [ ! -f "$SQLITE_DATABASE_NAME" ]; then
