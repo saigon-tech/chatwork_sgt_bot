@@ -1,7 +1,7 @@
 from flask import Flask
 from celery import Celery
 from src.api.routes import api_bp
-from .extensions import db, migrate
+from .extensions import db, migrate, cache
 
 # flake8: noqa
 import src.model
@@ -44,3 +44,4 @@ def create_celery_app(app=None):
 def extensions(app):
     db.init_app(app)
     migrate.init_app(app)
+    cache.init_app(app)
