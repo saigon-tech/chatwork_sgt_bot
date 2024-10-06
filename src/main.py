@@ -2,6 +2,7 @@ from flask import Flask
 from celery import Celery
 from src.api.routes import api_bp
 from .extensions import db, migrate, cache
+import os
 
 # flake8: noqa
 import src.model
@@ -9,7 +10,7 @@ import src.model
 
 def create_app(setting_override=None):
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object("src.config.Config")
+    app.config.from_object(os.getenv("APP_SETTINGS", "config.settings.ProductionConfig"))
     if setting_override:
         app.config.update(setting_override)
 

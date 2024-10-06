@@ -11,7 +11,7 @@ services:
     env_file:
       - '.env'
     ports:
-      - '${APP_PORT}:${APP_PORT}'
+      - '${PORT}:${PORT}'
     command: sh -c 'chmod +x /home/user/sgtbot/entrypoint.sh && /home/user/sgtbot/entrypoint.sh && python run.py'
   
   worker:
