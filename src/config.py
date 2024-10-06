@@ -31,3 +31,9 @@ class Config:
 
     # https://stackoverflow.com/questions/33738467/how-do-i-know-if-i-can-disable-sqlalchemy-track-modifications
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    CACHE_TYPE = "RedisCache"
+    CACHE_DEFAULT_TIMEOUT = 1800
+    CACHE_REDIS_HOST = "redis"
+    CACHE_REDIS_PORT = 6379
+    CACHE_REDIS_DB = 0
