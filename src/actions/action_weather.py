@@ -2,6 +2,7 @@ import requests
 from src.actions.action_decorator import Action, ActionRegistry
 from src.utils.web_utils import WebHelper
 from src.utils.logger import logger
+from src.config import Config
 
 action = "weather"
 description = "Forecast weather report for a given location or city or forecast weather request"
@@ -9,10 +10,10 @@ description = "Forecast weather report for a given location or city or forecast 
 
 def weather_forecast(city):
     # Secret info
-    api_url = "https://open-weather13.p.rapidapi.com/"
+    api_url = "https://" + Config.WEATHER_HOST + "/"
     headers = headers = {
-        "x-rapidapi-host": "open-weather13.p.rapidapi.com",
-        "x-rapidapi-key": "02cc6ec43bmsh87d1bf82f74b591p1b74cejsn580422db90a3"
+        "x-rapidapi-host": Config.WEATHER_HOST,
+        "x-rapidapi-key": Config.WEATHER_TOKEN,
     }
     url = api_url + "/city/" + city + "/EN"
 

@@ -20,3 +20,6 @@ class Config:
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
     GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
     GITHUB_EXCLUDE_PATTERNS = os.environ.get("GITHUB_EXCLUDE_PATTERNS", "")
+
+    WEATHER_HOST = os.environ.get("WEATHER_HOST", "mockup")
+    WEATHER_TOKEN = os.environ.get("WEATHER_TOKEN", "mockup")
