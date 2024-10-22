@@ -43,41 +43,33 @@ class CreateMeetingEventAction(Action):
     def _create_calendar_event(self, event):
         service = _get_calendar_service()
         event = {
-            'summary': event.eventName,
-            'description': event.eventDescription or "",
+            'summary': event['eventName'],
+            'description': event['eventDescription'] or "",
             'start': {
-                'dateTime': event.startDatetime,
+                'dateTime': event['startDatetime'],
                 'timeZone': 'Asia/Ho_Chi_Minh',
             },
             'end': {
-                'dateTime': event.endDatetime or event.startDatetime,
+                'dateTime': event['endDatetime'] or event['startDatetime'],
                 'timeZone': 'Asia/Ho_Chi_Minh',
             },
         }
         API_URL = self.get_config_value("API_URL")
-        eventResult = service.events().insert(calendarId=Config.MEETING_CALENDAR_ID, body=event).execute()
+        eventResult = service.events().insert(calendarId=self.get_config_value("MEETING_CALENDAR_ID"), body=event).execute()
 
     def _get_calendar_service():
-        """Shows basic usage of the Google Calendar API.
-        Prints the start and name of the next 10 events on the user's calendar.
-        """
-        creds = None
-        # The file token.json stores the user's access and refresh tokens, and is
-        # created automatically when the authorization flow completes for the first
-        # time.
-        if os.path.exists("token.json"):
-            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-        # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    "credentials.json", SCOPES
-                )
-                creds = flow.run_local_server(port=0)
-            # Save the credentials for the next run
-            with open("token.json", "w") as token:
-                token.write(creds.to_json())
-        service = build("calendar", "v3", credentials=creds)
-        return service
+        credentials = Credentials.from_service_account_info({
+            "type": "service_account",
+            "project_id": self.get_config_value("PROJECT_ID"),
+            "private_key_id": self.get_config_value("PRIVATE_KEY_ID"),
+            "private_key": self.get_config_value("PRIVATE_KEY"),
+            "client_email": self.get_config_value("CLIENT_EMAIL"),
+            "client_id": self.get_config_value("CLIENT_ID"),
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": self.get_config_value("CLIENT_X509_CERT_URL"),
+            "universe_domain": "googleapis.com",
+        })
+
+        return build('calendar', 'v3', credentials=credentials)
