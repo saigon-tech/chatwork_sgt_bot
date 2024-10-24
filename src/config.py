@@ -36,4 +36,3 @@ class Config:
     CACHE_TYPE = "RedisCache"
     CACHE_DEFAULT_TIMEOUT = 1800
     CACHE_REDIS_URL = os.environ.get("CACHE_REDIS_URL") or "redis://redis:6379/0"
-    MEETING_CALENDAR_ID = os.environ.get("MEETING_CALENDAR_ID", "")

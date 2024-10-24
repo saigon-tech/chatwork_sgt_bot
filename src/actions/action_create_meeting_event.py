@@ -54,7 +54,6 @@ class CreateMeetingEventAction(Action):
                 'timeZone': 'Asia/Ho_Chi_Minh',
             },
         }
-        API_URL = self.get_config_value("API_URL")
         eventResult = service.events().insert(calendarId=self.get_config_value("MEETING_CALENDAR_ID"), body=event).execute()
 
     def _get_calendar_service():
