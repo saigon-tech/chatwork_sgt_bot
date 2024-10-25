@@ -1,11 +1,13 @@
+import json
 from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
+from google.oauth2.service_account import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from src.actions.action_decorator import Action, ActionRegistry
 from src.config import Config
+from src.utils.logger import logger
 from src.utils.web_utils import WebHelper
 
 SCOPES = [
@@ -17,18 +19,18 @@ SCOPES = [
 class CreateMeetingEventAction(Action):
     def execute(self, room_id: str, account_id: str, message: str, web_helper: WebHelper) -> str:
         try:
-            event = self._get_data_from_message(self, message)
-            self._create_calendar_event(self, event)
-            return "Success."
+            event = self._get_data_from_message(message, web_helper)
+            self._create_calendar_event(event)
+            return "Event registration successful!"
         except Exception as e:
             error_message = f"An error occurred while trying to create event: {str(e)}"
             logger.error(error_message, exc_info=True)
             return "Cannot create google calendar event."
 
-    def _get_data_from_message(self, message):
+    def _get_data_from_message(self, message, web_helper):
         event = web_helper.query_ai(
             prompt=(
-                "Get an object of google calendar event from the text include eventName, eventDescription, startDatetime, endDatetime: "
+                "Get an json object of google calendar event from the text include eventName, eventDescription, startDatetime, endDatetime: "
                 f"{message}"
                 f"If not found property, set it null."
                ),
@@ -38,25 +40,27 @@ class CreateMeetingEventAction(Action):
             ),
             max_tokens=300,
         )
+        print(event)
         return event
 
     def _create_calendar_event(self, event):
+        eventObj = json.loads(event)
         service = self._get_calendar_service()
         event = {
-            'summary': event['eventName'],
-            'description': event['eventDescription'] or "",
+            'summary': eventObj['eventName'],
+            'description': eventObj['eventDescription'] or "",
             'start': {
-                'dateTime': event['startDatetime'],
+                'dateTime': eventObj['startDatetime'],
                 'timeZone': 'Asia/Ho_Chi_Minh',
             },
             'end': {
-                'dateTime': event['endDatetime'] or event['startDatetime'],
+                'dateTime': eventObj['endDatetime'] or eventObj['startDatetime'],
                 'timeZone': 'Asia/Ho_Chi_Minh',
             },
         }
         eventResult = service.events().insert(calendarId=self.get_config_value("MEETING_CALENDAR_ID"), body=event).execute()
 
-    def _get_calendar_service():
+    def _get_calendar_service(self):
         credentials = Credentials.from_service_account_info({
             "type": "service_account",
             "project_id": self.get_config_value("PROJECT_ID"),
