@@ -23,4 +23,4 @@ echo "
 "
 
 # Start replication
-litestream replicate -exec "gunicorn -b 0.0.0.0:$PORT run:app" "$SQLITE_DATABASE_NAME" "$REPLICA_URL"
+litestream replicate -exec "celery -A run.celery_app worker -l info" "$SQLITE_DATABASE_NAME" "$REPLICA_URL"
