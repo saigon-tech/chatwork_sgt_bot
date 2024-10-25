@@ -17,8 +17,8 @@ SCOPES = [
 class CreateMeetingEventAction(Action):
     def execute(self, room_id: str, account_id: str, message: str, web_helper: WebHelper) -> str:
         try:
-            event = _get_data_from_message(self, message)
-            _create_calendar_event(self, event)
+            event = self._get_data_from_message(self, message)
+            self._create_calendar_event(self, event)
             return "Success."
         except Exception as e:
             error_message = f"An error occurred while trying to create event: {str(e)}"
@@ -41,7 +41,7 @@ class CreateMeetingEventAction(Action):
         return event
 
     def _create_calendar_event(self, event):
-        service = _get_calendar_service()
+        service = self._get_calendar_service()
         event = {
             'summary': event['eventName'],
             'description': event['eventDescription'] or "",
