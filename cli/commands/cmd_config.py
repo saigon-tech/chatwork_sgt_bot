@@ -22,6 +22,13 @@ def set(action_name, key_value_pairs):
         for pair in key_value_pairs:
             try:
                 key, value = pair.split("=", 1)
+                key = key.strip()
+                value = value.strip()
+                
+                # Handle multiline input
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]  # Remove surrounding quotes
+                    value = value.replace('\\n', '\n')  # Replace \\n with actual newlines
             except ValueError:
                 click.echo(f"Error: Invalid format for '{pair}'. Use 'key=value'.")
                 continue
@@ -30,11 +37,11 @@ def set(action_name, key_value_pairs):
             config = Config.query.filter_by(key=full_key).first()
             if config:
                 config.value = value
-                click.echo(f"Updated: {full_key} = {value}")
+                click.echo(f"Updated: {full_key}")
             else:
                 config = Config(key=full_key, value=value)
                 db.session.add(config)
-                click.echo(f"Added: {full_key} = {value}")
+                click.echo(f"Added: {full_key}")
         db.session.commit()
 
 

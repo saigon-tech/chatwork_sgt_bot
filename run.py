@@ -10,7 +10,7 @@ if __name__ == "__main__":
     logger.info("Starting the application in debug mode with auto-reloading")
     app.run(
         host="0.0.0.0",
-        port=app.config["APP_PORT"],
+        port=app.config["PORT"],
         debug=True,
         use_reloader=True,
     )

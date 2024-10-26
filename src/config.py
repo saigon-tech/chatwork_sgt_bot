@@ -12,6 +12,7 @@ class Config:
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
     CHATWORK_WEBHOOK_TOKEN = os.environ.get("CHATWORK_WEBHOOK_TOKEN", "")
     CHATWORK_WEBHOOK_ID = os.environ.get("CHATWORK_WEBHOOK_ID", "")
+    PORT = os.environ.get("PORT", 5000)
 
     # Celery configurations
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or DEFAULT_REDIS_URL

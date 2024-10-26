@@ -3,7 +3,8 @@ PYTHON = python3
 FLASK = flask
 PYTEST = pytest
 DOCKER_COMPOSE = docker-compose
-SERVICE_NAME = api 
+SERVICE_NAME = api
+WORKER_NAME = worker
 
 # Default target
 all: build up
@@ -27,7 +28,7 @@ down:
 
 # Connect to the container shell
 connect:
-	$(DOCKER_COMPOSE) exec $(SERVICE_NAME) bash
+	$(DOCKER_COMPOSE) exec $(WORKER_NAME) bash
 
 # Run all tests
 test:

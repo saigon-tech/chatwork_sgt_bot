@@ -12,7 +12,7 @@ services:
       - '.env'
     ports:
       - '${PORT}:${PORT}'
-    command: sh -c 'chmod +x /home/user/sgtbot/entrypoint.sh && /home/user/sgtbot/entrypoint.sh && python run.py'
+    command: python run.py
   
   worker:
     container_name: sgtbot-worker
@@ -25,7 +25,7 @@ services:
       - '.env'
     depends_on:
       - redis
-    command: celery -A run.celery_app worker -l info
+    command: sh -c 'chmod +x /home/user/sgtbot/entrypoint.sh && /home/user/sgtbot/entrypoint.sh && celery -A run.celery_app worker -l info'
 
   redis:
     container_name: sgtbot-redis
